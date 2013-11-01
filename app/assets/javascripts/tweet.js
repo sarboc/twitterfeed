@@ -1,16 +1,18 @@
-var getTweets = function() {
+var getTweets = function(search) {
   // event.preventDefault();
-  var search = $('#search').val()
+
   $.ajax({
     url: '/tweets.json',
     data: { search: search },
     type: 'GET'
   }).done(function(data) {
+    console.log(data[0]);
     _.each(data, function(t) {
       var $tweet = JST['templates/tweet']({
         text: t.text,
         user: t.from_user,
-        id: t.id
+        id: t.id,
+        image: t.user.profile_image_url
       });
       $('.list').prepend($tweet);
     });
@@ -20,10 +22,13 @@ var getTweets = function() {
 
 
 $(function() {
+
+  getTweets('kittenz');
+
   $('form').submit(function() {
     event.preventDefault();
-    getTweets();
+    var search = $('#search').val()
+    getTweets(search);
   });
-
 
 });
