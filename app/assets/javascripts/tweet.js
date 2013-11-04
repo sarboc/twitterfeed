@@ -6,15 +6,17 @@ var getTweets = function(search) {
     data: { search: search },
     type: 'GET'
   }).done(function(data) {
-    console.log(data[0]);
+    $('#tweets').children().fadeOut().empty();
+    $('body').css('background-image', 'url(' + _.sample(data).user.profile_background_image_url + ')')
     _.each(data, function(t) {
       var $tweet = JST['templates/tweet']({
         text: t.text,
-        user: t.from_user,
+        name: t.user.name,
         id: t.id,
-        image: t.user.profile_image_url
+        image: t.user.profile_image_url,
+        user: t.user.screen_name
       });
-      $('.list').prepend($tweet);
+      $('#tweets').prepend($tweet);
     });
   });
 };
@@ -23,7 +25,7 @@ var getTweets = function(search) {
 
 $(function() {
 
-  getTweets('kittenz');
+  getTweets('kittens');
 
   $('form').submit(function() {
     event.preventDefault();
